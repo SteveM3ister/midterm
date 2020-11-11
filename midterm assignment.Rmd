@@ -12,15 +12,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, message=FALSE}
 library(tidyverse)
 library(drat)
-library(usmap)
 library(ggplot2)
 library(maps)
 library(dplyr)
 library(gridExtra)
 library(magrittr)
-library(tmap)
-library(sp)
-library(sf)
 library(viridis)
 library(lubridate)
 ```
@@ -55,16 +51,19 @@ public[which(public$countyCode<100&public$countyCode>9),"countyCode"]<-temp2
 public[which(as.numeric(public$countyCode)<10),"countyCode"]<-temp1
 public$countyCode%<>%as.character()
 public['fips']<-paste(public$stateNumberCode,public$countyCode,sep="")
-public%<>%select(c("declarationDate","incidentType","county","countyCode","state","stateNumberCode","fips"))
+public%<>%select(c("disasterNumber","declarationDate","incidentType","county","state","fips"))
 public<-public[!duplicated(public),]
 ```
 
 ```{r}
 save<-public
+save%<>%na.omit()
+write.csv(save,file="save.csv",col.names=TRUE)
 ```
 
 
 ```{r}
+public<-save
 #counties_df<-us_map(regions="counties")
 county_fips <- county.fips
 county_fips$fips <- str_pad(county_fips$fips,5,side = "left",pad = "0")
@@ -75,13 +74,17 @@ map_states_border<-map_data("state")
 ```{r}
 
 # Add the longitude and latitude information
-public<-left_join(public, county_fips,by = c("fips"))%>%separate(polyname, sep = ",", into = c("region","subregion"))
-public <-left_join(public,map_county, by=c("region","subregion"))
+public%<>%na.omit()
+public<-merge(public, county_fips,by = c("fips"))%>%separate(polyname, sep = ",", into = c("region","subregion"))
+public <-merge(public,map_county, by=c("region","subregion"))
 public%<>%na.omit()
 # Use lubridate to tidy up the declaration time
 public$declarationDate%<>%ymd_hms()
 #public%<>%subset(year(public$declarationDate)>2009)
-
+public%<>%select(-c("county","state"))
+public["yy"]<-year(public$declarationDate)
+public["mm"]<-month(public$declarationDate)
+public["dd"]<-day(public$declarationDate)
 
 ```
 ```{r}
