@@ -1,0 +1,112 @@
+---
+title: "MA615 Mapping Project Report"
+date: "11/11/2020"
+output: html_document
+framework: bootstrap
+mode: selfcontained
+widgets: "nyt_home"
+highlighter: prettify
+hitheme: twitter-bootstrap
+assets:
+  css:
+    - "http://fonts.googleapis.com/css?family=Raleway:300"
+    - "http://fonts.googleapis.com/css?family=Oxygen"
+
+---
+
+<style>
+body{
+  font-family:'Oxygen', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+h1,h2,h3,h4 {
+  font-family:'Raleway',sans-serif;
+}
+
+.container{width:1000px;}
+h3{
+background-color: #D4DAEC;
+text-indent:100px;
+}
+h4{
+text-indent:100px;
+}
+
+g-table-intro h4{
+text-indent: 0px;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Introduction
+
+Our group members are Ziyi Bai, Yinfeng Zhou and Congyao Duan. This is our group report about what we have done for this mapping project.
+
+### Step1: Data Cleaning 
+
+Our dataset is based on the [FEMA Dataset](https://www.fema.gov/openfema-data-page/public-assistance-funded-projects-details-v1), which is about Public Assistance Funded Projects Details. We filtered the data about storm from 1998-8-26 to 2020-3-30 and added information about longitude and latitude into the dataset. Our dataset contains 562497 rows and 14 variables. 
+
+<h4>The following image is an indicator about our dataset.</h4>
+
+![data](/Users/baiziyi/Desktop/data.jpeg)
+
+<h4>Full process of data cleaning: you may access our code from [github](https://github.com/MSSP-615-Team-15/midterm.git)</h4>
+
+
+![data cleaning](/Users/baiziyi/Desktop/2.jpeg)
+![data cleaning](/Users/baiziyi/Desktop/3.jpeg)
+![data cleaning](/Users/baiziyi/Desktop/4.jpeg)
+
+
+### Setp 2: Summary of our dataset
+
+```{r}
+public <- read.csv("public.csv")
+head(public)
+summary(public$long)
+summary(public$lat)
+```
+
+```{r}
+library(ggplot2)
+save <- read.csv("save.csv")
+ggplot(save,aes(x=incidentType))+geom_histogram(position="identity",stat="count",fill="lightblue", color="black")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1),
+        axis.text = element_text(size = 7),
+        axis.title = element_text(size = 13, face = "bold"))
+```
+
+### Step 3: Interaction shiny app
+
+Feel free to access our [shiny app](https://ziyibai-shinyapp.shinyapps.io/MA615-mapping2-project/).
+
+We made an interaction shiny app to show which area of the United States had explored which type of incident. In our shiny app, you are able to drag and zoom in our map to take a closer look of the whole country map. Also, we have a sidebar which used to select the incident type, year, month and day. After you select them all, the corresponding area will become shaded and keep flashing to notice you. Following are some examples of our shiny app.
+
+This one shows you the area that exposed to Coastal Storm in 2001-6-9.
+
+
+![shiny](/Users/baiziyi/Desktop/5.jpeg)
+
+
+This one shows you where experienced Terrorist in 2013-4-17.
+
+![shiny](/Users/baiziyi/Desktop/6.jpeg)
+
+You are able to explore more information in our shiny app!
+
+
+### Step 4: Presentation 
+
+Feel free to access our [presentation document](file:///Users/baiziyi/Library/Containers/com.tencent.xinWeChat/Data/Library/Application%20Support/com.tencent.xinWeChat/2.0b4.0.9/c446cd90748a76a317ee785307e8d5ef/Message/MessageTemp/c7aaac3ca72d81b88e17f96b7331116d/File/slide(1).html#/)
+
+### Thanks
+
+Thanks this html example [contributor](https://github.com/ziyibai/rCharts_nyt_home_price/blob/gh-pages/index.Rmd)
+
+
+
