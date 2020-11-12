@@ -1,0 +1,152 @@
+---
+title: "Hurricane Maps"
+author:  "Yinfeng Zhou,Congyao Duan,Ziyi Bai"
+output:
+  revealjs::revealjs_presentation:
+    center: yes
+    theme: moon
+date: "11 November，2020"
+---
+
+```{r setup, include = FALSE}
+library(revealjs)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+
+
+<style type="text/css">
+
+  .reveal p {
+
+    text-align: left;
+
+    color: #FFFFFF
+
+  }
+
+  .reveal ul {
+
+    display: block;
+
+  }
+
+  .reveal ol {
+
+    display: block;
+
+  }
+
+  
+
+  body {
+
+  margin: 0;
+
+  background-color: black;
+
+}
+
+
+
+.star {
+
+  position: absolute;
+
+  width: 1px;
+
+  height: 1px;
+
+  background-color: white;
+
+}
+
+</style>
+
+
+
+<script>
+
+const numStars = 200;
+
+
+for (let i = 0; i < numStars; i++) {
+
+  let star = document.createElement("div");  
+
+  star.className = "star";
+
+  var xy = getRandomPosition();
+
+  star.style.top = xy[0] + 'px';
+
+  star.style.left = xy[1] + 'px';
+
+  document.body.append(star);
+
+}
+
+
+function getRandomPosition() {  
+
+  var y = window.innerWidth;
+
+  var x = window.innerHeight;
+
+  var randomX = Math.floor(Math.random()*x);
+
+  var randomY = Math.floor(Math.random()*y);
+
+  return [randomX,randomY];
+
+}
+
+</script>
+
+
+All code is available on[Github]https://github.com/MSSP-615-Team-15/midterm.
+
+
+
+# Introduction
+
+We downloaded information about the storms from the FAMA website.We plan to filter out information about storms from 1998 to 2020 to draw maps and present our result clearly with shiny.
+
+# Data
+
+-The website we download our data : https://www.fema.gov/openfema-data-page/public-assistance-funded-projects-details#
+
+-It contains information about the location of the storms(hurricanes)
+
+-It contains information from 1998-8-26 to 2020-3-30
+
+-It has 562497 rows of 14 variables
+
+
+
+# Data cleaning
+
+-Add latitude and longitude information to the data
+
+-Removed all NA values
+
+-Get rid of the variables we don't need
+
+## data table 
+
+```{R}
+read.csv("https://raw.githubusercontent.com/MSSP-615-Team-15/midterm/main/public.csv")
+```
+
+
+# Maps&shiny
+
+You can get different maps by choosing different incident type/year/mouth/day to get different map from our shiny app.
+
+## Link to our app
+
+-The website of our app: http://127.0.0.1:6628/
+
+
+
+# Thanks for watching

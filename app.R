@@ -47,7 +47,7 @@ ui <- fluidPage(
     tags$h5("Created by Yinfeng Zhou, Ziyi Bai and Congyao Duan from Boston University"),
     hr(),
     navbarPage("Quick Stats for Hurricane",theme=shinytheme("lumen"),
-               tabPanel("Interacitve Map",fluid=TRUE,icon=icon("table"),
+               tabPanel("Interacitve Map",fluid=TRUE,icon=icon("globe-americas"),
                         leafletOutput("map", width="100%", height="1000"),
                         absolutePanel(id = "Select Panel", class = "panel panel-default", fixed = TRUE,
                                       draggable = TRUE, top = 200, left = "auto", right = 20, bottom = "auto",
