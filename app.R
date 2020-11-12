@@ -19,6 +19,7 @@ library(rgdal)
 library(dplyr)
 library(maps)
 library(ggplot2)
+library(DT)
 
 public<-read.csv2("public.csv",header=TRUE,sep=",")
 save<-read.csv2("save.csv",header=TRUE,sep=",")
@@ -62,6 +63,28 @@ ui <- fluidPage(
                                       ),
             
          ),
+         tabPanel("Analysis",icon=icon("table"),fluid=TRUE,
+                  sidebarLayout(
+                      sidebarPanel(
+                          titlePanel("Hurricane Explorer"),
+                          fluidRow(
+                              selectInput(inputId="StateFinder",
+                                                 label="Select State(s):",
+                                                 choices=unique(save$state))
+                          )
+                      ),
+                      mainPanel(
+                          fluidRow(
+                              withSpinner(dataTableOutput(outputId="Table"))
+                          ),
+                          fluidRow(
+                              column(6,tags$h4("Histogram"),
+                                     plotOutput("Hist")
+                          ),
+                      )
+                  ))
+                  
+                  ),
                
                
         
@@ -171,10 +194,29 @@ server <- function(input, output,session) {
                             highlightOptions = highlightOptions(color = "red", weight = 3,
                                                                 bringToFront = TRUE,dashArray="")
                             )
+
         
             
         })
     
+#Analysis
+    HurrFinder<-reactive({
+        req(input$StateFinder)
+        filter(save,state %in% input$StateFinder)
+    })
+    
+
+    output$Table<-renderDataTable({
+        datatable(HurrFinder())
+    })
+    output$Hist<-renderPlot({
+        ggplot(HurrFinder(),aes(x=incidentType))+geom_histogram(position="identity",stat="count",fill="lightblue", color="black")+
+            theme(axis.text.x = element_text(angle = 60, hjust = 1),
+                  axis.text = element_text(size = 12),
+                  axis.title = element_text(size = 13, face = "bold"))+
+            geom_text(stat="count",aes(label = scales::percent(..count../sum(..count..))), size=5, position=position_stack(vjust = 0.5),col="black")}
+    )
+
      
 
 }
